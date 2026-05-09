@@ -11,15 +11,15 @@ app = Flask(__name__, template_folder='../templates', static_folder='../static')
 CORS(app)
 
 # Database configuration
-DB_USER = 'root'
-DB_PASSWORD = quote_plus('Kar@~2005')  # URL encode the password
-DB_HOST = '127.0.0.1'
-DB_PORT = '3306'
-DB_NAME = 'ecommerce'
+DB_USER = os.environ.get('DB_USER', 'root')
+DB_PASSWORD = quote_plus(os.environ.get('DB_PASSWORD', 'your_password_here'))  # URL encode the password
+DB_HOST = os.environ.get('DB_HOST', '127.0.0.1')
+DB_PORT = os.environ.get('DB_PORT', '3306')
+DB_NAME = os.environ.get('DB_NAME', 'ecommerce')
 
 app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = '5f8d7b3a9c2e1f6d4b0a7e5c3f8d2b1a6e4c7f9d3b2a5e8c1f6d4b0a7e5c3f8d'  # Secure secret key for session management
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'default-dev-secret-key')  # Secure secret key for session management
 
 # Initialize the database with the app
 db.init_app(app)
@@ -472,6 +472,10 @@ def debug_user():
         Is Admin: {user.is_admin}
         """
     return "Not logged in"
+
+@app.route('/order_confirmation')
+def order_confirmation():
+    return render_template('order_confirmation.html')
 
 if __name__ == '__main__':
     app.run(debug=True) 

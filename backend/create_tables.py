@@ -4,11 +4,12 @@ from urllib.parse import quote_plus
 from models import db, CartItem, Cart, Product
 
 # Database configuration
-DB_USER = 'root'
-DB_PASSWORD = quote_plus('Kar@~2005')  # URL encode the password
-DB_HOST = '127.0.0.1'
-DB_PORT = '3306'
-DB_NAME = 'ecommerce'
+import os
+DB_USER = os.environ.get('DB_USER', 'root')
+DB_PASSWORD = quote_plus(os.environ.get('DB_PASSWORD', 'your_password_here'))  # URL encode the password
+DB_HOST = os.environ.get('DB_HOST', '127.0.0.1')
+DB_PORT = os.environ.get('DB_PORT', '3306')
+DB_NAME = os.environ.get('DB_NAME', 'ecommerce')
 
 def create_tables():
     try:
