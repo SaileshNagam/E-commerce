@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}My Wishlist - E-Commerce Store{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="fas fa-heart me-2"></i>My Wishlist</h2>
+        <a href="{{ url_for('products') }}" class="btn btn-outline-primary">
+            <i class="fas fa-shopping-bag me-2"></i>Continue Shopping
+        </a>
+    </div>
+    
+    {% if products %}
+        <div class="row">
+            {% for product in products %}
+            <div class="col-md-4 mb-4">
+                <div class="card wishlist-item h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h5 class="card-title mb-0">{{ product.ProductName }}</h5>
+                            <form action="{{ url_for('remove_from_wishlist', product_id=product.ProductID) }}" method="POST" class="remove-btn">
+                                <button type="submit" class="btn btn-sm btn-danger">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </form>
+                        </div>
+                        
+                        <div class="product-info mb-3">
+                            <p class="mb-2">
+                                <span class="badge bg-primary me-2">Brand</span>
+                                {{ product.Brand }}
+                            </p>
+                            <p class="mb-2">
+                                <span class="badge bg-success me-2">Price</span>
+                                <span class="product-price">${{ "%.2f"|format(product.MRP) }}</span>
+                            </p>
+                            <p class="mb-0">
+                                <span class="badge bg-info me-2">Stock</span>
+                                {{ product.Stock }} units available
+                            </p>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <a href="{{ url_for('product_detail', product_id=product.ProductID) }}" class="btn btn-primary">
+                                <i class="fas fa-eye me-2"></i>View Details
+                            </a>
+                            <form action="{{ url_for('add_to_cart', product_id=product.ProductID) }}" method="POST">
+                                <button type="submit" class="btn btn-success w-100">
+                                    <i class="fas fa-shopping-cart me-2"></i>Add to Cart
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center py-5">
+            <i class="far fa-heart fa-4x mb-3 text-muted"></i>
+            <h3 class="text-muted mb-3">Your wishlist is empty</h3>
+            <p class="text-muted mb-4">Start adding items to your wishlist to keep track of products you love!</p>
+            <a href="{{ url_for('products') }}" class="btn btn-primary btn-lg">
+                <i class="fas fa-shopping-bag me-2"></i>Browse Products
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %} 

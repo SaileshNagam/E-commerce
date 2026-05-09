@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+
+{% block title %}Add New Product - Admin Panel{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0"><i class="fas fa-plus-circle me-2"></i>Add New Product</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('add_product') }}" class="needs-validation" novalidate>
+                        <div class="mb-3">
+                            <label for="product_name" class="form-label">Product Name</label>
+                            <input type="text" class="form-control" id="product_name" name="product_name" required>
+                            <div class="invalid-feedback">
+                                Please enter a product name.
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="mrp" class="form-label">Price (MRP)</label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input type="number" class="form-control" id="mrp" name="mrp" step="0.01" min="0" required>
+                                <div class="invalid-feedback">
+                                    Please enter a valid price.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="brand" class="form-label">Brand</label>
+                            <input type="text" class="form-control" id="brand" name="brand" required>
+                            <div class="invalid-feedback">
+                                Please enter a brand name.
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="stock" class="form-label">Stock Quantity</label>
+                            <input type="number" class="form-control" id="stock" name="stock" min="0" required>
+                            <div class="invalid-feedback">
+                                Please enter a valid stock quantity.
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="seller_id" class="form-label">Seller</label>
+                            <select class="form-select" id="seller_id" name="seller_id" required>
+                                <option value="">Select a seller</option>
+                                {% for seller in sellers %}
+                                    <option value="{{ seller.SellerID }}">{{ seller.CompanyName }} ({{ seller.SellerName }})</option>
+                                {% endfor %}
+                            </select>
+                            <div class="invalid-feedback">
+                                Please select a seller.
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="category_id" class="form-label">Category</label>
+                            <select class="form-select" id="category_id" name="category_id" required>
+                                <option value="">Select a category</option>
+                                {% for category in categories %}
+                                    <option value="{{ category.CategoryID }}">{{ category.CategoryName }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="invalid-feedback">
+                                Please select a category.
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Add Product
+                            </button>
+                            <a href="{{ url_for('products') }}" class="btn btn-outline-secondary">
+                                <i class="fas fa-times me-2"></i>Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.card {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    border: none;
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.btn {
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.btn-primary:hover {
+    background-color: #0b5ed7;
+    border-color: #0a58ca;
+    transform: translateY(-1px);
+}
+
+.btn-outline-secondary:hover {
+    transform: translateY(-1px);
+}
+</style>
+
+<script>
+// Form validation
+(function () {
+    'use strict'
+    var forms = document.querySelectorAll('.needs-validation')
+    Array.prototype.slice.call(forms).forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+            }
+            form.classList.add('was-validated')
+        }, false)
+    })
+})()
+
+// Price input validation
+document.getElementById('mrp').addEventListener('input', function(e) {
+    if (this.value < 0) {
+        this.value = 0;
+    }
+});
+
+// Stock input validation
+document.getElementById('stock').addEventListener('input', function(e) {
+    if (this.value < 0) {
+        this.value = 0;
+    }
+});
+</script>
+{% endblock %} 

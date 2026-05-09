@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Home - E-Commerce Store{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-header">
+                <h5>Categories</h5>
+            </div>
+            <div class="list-group list-group-flush">
+                {% for category in categories %}
+                <a href="{{ url_for('products', category=category.CategoryID) }}" class="list-group-item list-group-item-action">
+                    {{ category.CategoryName }}
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-9">
+        <h2>Featured Products</h2>
+        <div class="row">
+            {% for product in products %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.ProductName }}</h5>
+                        <p class="card-text">
+                            Brand: {{ product.Brand }}<br>
+                            Price: ${{ "%.2f"|format(product.MRP) }}<br>
+                            Stock: {{ product.Stock }}
+                        </p>
+                        <a href="{{ url_for('product_detail', product_id=product.ProductID) }}" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %} 

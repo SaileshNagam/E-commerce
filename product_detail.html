@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.ProductName }} - E-Commerce Store{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <!-- Product Details -->
+        <div class="col-md-6">
+            <div class="card product-details">
+                <div class="card-body">
+                    <h2 class="card-title mb-4">{{ product.ProductName }}</h2>
+                    <div class="product-info mb-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <span class="badge bg-primary me-2">Brand</span>
+                            <h5 class="mb-0">{{ product.Brand }}</h5>
+                        </div>
+                        <div class="product-price mb-3">
+                            ${{ "%.2f"|format(product.MRP) }}
+                        </div>
+                        <div class="d-flex align-items-center mb-3">
+                            <span class="badge bg-success me-2">Stock</span>
+                            <h5 class="mb-0">{{ product.Stock }} units available</h5>
+                        </div>
+                        <div class="d-flex align-items-center mb-4">
+                            <span class="badge bg-warning me-2">Rating</span>
+                            <div class="rating">
+                                {% for i in range(5) %}
+                                    {% if i < avg_rating|int %}
+                                        <i class="fas fa-star"></i>
+                                    {% elif i < avg_rating|round(0, 'ceil')|int %}
+                                        <i class="fas fa-star-half-alt"></i>
+                                    {% else %}
+                                        <i class="far fa-star"></i>
+                                    {% endif %}
+                                {% endfor %}
+                                <span class="ms-2">{{ "%.1f"|format(avg_rating) }}/5.0</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <form action="{{ url_for('add_to_cart', product_id=product.ProductID) }}" method="POST" class="mb-3">
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="quantity" value="1" min="1" max="{{ product.Stock }}" style="max-width: 100px;">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-shopping-cart me-2"></i>Add to Cart
+                                </button>
+                            </div>
+                        </form>
+                        
+                        {% if session.get('customer_id') %}
+                            {% if in_wishlist %}
+                                <form action="{{ url_for('remove_from_wishlist', product_id=product.ProductID) }}" method="POST">
+                                    <button type="submit" class="btn btn-danger w-100">
+                                        <i class="fas fa-heart-broken me-2"></i>Remove from Wishlist
+                                    </button>
+                                </form>
+                            {% else %}
+                                <form action="{{ url_for('add_to_wishlist', product_id=product.ProductID) }}" method="POST">
+                                    <button type="submit" class="btn btn-outline-primary w-100">
+                                        <i class="far fa-heart me-2"></i>Add to Wishlist
+                                    </button>
+                                </form>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Reviews Section -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3 class="mb-0">Customer Reviews</h3>
+                    <span class="badge bg-primary">{{ reviews|length }} reviews</span>
+                </div>
+                <div class="card-body">
+                    {% if session.get('customer_id') %}
+                        <form action="{{ url_for('add_review', product_id=product.ProductID) }}" method="POST" class="review-form mb-4">
+                            <div class="mb-3">
+                                <label for="rating" class="form-label">Your Rating</label>
+                                <select class="form-select" id="rating" name="rating" required>
+                                    <option value="">Select rating</option>
+                                    <option value="5">⭐⭐⭐⭐⭐ Excellent</option>
+                                    <option value="4">⭐⭐⭐⭐ Very Good</option>
+                                    <option value="3">⭐⭐⭐ Good</option>
+                                    <option value="2">⭐⭐ Fair</option>
+                                    <option value="1">⭐ Poor</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Your Review</label>
+                                <textarea class="form-control" id="description" name="description" rows="3" required 
+                                    placeholder="Share your experience with this product..."></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane me-2"></i>Submit Review
+                            </button>
+                        </form>
+                    {% else %}
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Please <a href="{{ url_for('login') }}" class="alert-link">login</a> to write a review.
+                        </div>
+                    {% endif %}
+                    
+                    <div class="reviews mt-4">
+                        {% if reviews %}
+                            {% for review in reviews %}
+                                <div class="review-item">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h5 class="mb-2">
+                                                <i class="fas fa-user-circle me-2"></i>
+                                                Customer #{{ review.CustomerID }}
+                                            </h5>
+                                            <div class="rating mb-2">
+                                                {% for i in range(5) %}
+                                                    {% if i < review.Ratings %}
+                                                        <i class="fas fa-star"></i>
+                                                    {% else %}
+                                                        <i class="far fa-star"></i>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <small class="text-muted">
+                                            <i class="far fa-clock me-1"></i>
+                                            {{ review.Description }}
+                                        </small>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="text-center py-4">
+                                <i class="far fa-comment-dots fa-3x mb-3 text-muted"></i>
+                                <p class="text-muted">No reviews yet. Be the first to review this product!</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

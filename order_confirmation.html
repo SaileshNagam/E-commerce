@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}Order Confirmation - E-Commerce Store{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card text-center">
+                <div class="card-body py-5">
+                    <i class="fas fa-check-circle text-success fa-5x mb-4"></i>
+                    <h2 class="card-title mb-4">Order Placed Successfully!</h2>
+                    <p class="card-text text-muted mb-4">
+                        Thank you for your purchase. Your order has been received and is being processed.
+                    </p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="{{ url_for('home') }}" class="btn btn-primary">
+                            <i class="fas fa-home me-2"></i>Continue Shopping
+                        </a>
+                        <a href="#" class="btn btn-outline-primary">
+                            <i class="fas fa-file-alt me-2"></i>View Order Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Information -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>What's Next?</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 text-center mb-3">
+                            <i class="fas fa-envelope text-primary fa-2x mb-3"></i>
+                            <h6>Order Confirmation</h6>
+                            <p class="text-muted small">You will receive an email confirmation shortly.</p>
+                        </div>
+                        <div class="col-md-4 text-center mb-3">
+                            <i class="fas fa-box text-primary fa-2x mb-3"></i>
+                            <h6>Order Processing</h6>
+                            <p class="text-muted small">We'll start processing your order right away.</p>
+                        </div>
+                        <div class="col-md-4 text-center mb-3">
+                            <i class="fas fa-truck text-primary fa-2x mb-3"></i>
+                            <h6>Shipping Updates</h6>
+                            <p class="text-muted small">You'll receive shipping updates via email.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.card {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    border: none;
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.btn {
+    padding: 0.5rem 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.btn-primary:hover {
+    background-color: #0b5ed7;
+    border-color: #0a58ca;
+    transform: translateY(-1px);
+}
+
+.btn-outline-primary {
+    color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.btn-outline-primary:hover {
+    background-color: #0d6efd;
+    color: white;
+    transform: translateY(-1px);
+}
+
+.text-success {
+    color: #198754 !important;
+}
+
+.gap-3 {
+    gap: 1rem !important;
+}
+</style>
+{% endblock %} 
